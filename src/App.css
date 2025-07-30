@@ -100,7 +100,8 @@ body {
 }
 
 .sidebar {
-  width: 300px;
+  width: 280px;
+  min-width: 260px;
   background: var(--glass-bg-secondary);
   backdrop-filter: blur(var(--blur-strength));
   -webkit-backdrop-filter: blur(var(--blur-strength));
@@ -218,9 +219,10 @@ body {
 
 .main-content {
   flex: 1;
-  padding: 2rem;
+  padding: 1.5rem;
   overflow-y: auto;
   background: transparent;
+  max-width: calc(100vw - 280px);
 }
 
 .no-project-selected {
@@ -269,8 +271,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
   background: var(--glass-bg-primary);
   backdrop-filter: blur(var(--blur-strength));
   -webkit-backdrop-filter: blur(var(--blur-strength));
@@ -305,8 +307,9 @@ body {
 
 .stages-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  max-width: 100%;
 }
 
 .stage-card {
@@ -314,12 +317,15 @@ body {
   backdrop-filter: blur(var(--blur-strength));
   -webkit-backdrop-filter: blur(var(--blur-strength));
   border-radius: var(--border-radius);
-  padding: 1.5rem;
+  padding: 1.25rem;
   box-shadow: 0 8px 32px var(--glass-shadow);
   border: 1px solid var(--glass-border);
   position: relative;
   overflow: hidden;
   transition: var(--transition-smooth);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
 }
 
 .stage-card::before {
@@ -371,13 +377,15 @@ body {
   flex-direction: column;
   gap: 0.75rem;
   margin-bottom: 1rem;
+  flex: 1;
+  min-height: 0;
 }
 
 .task-item {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 0.875rem;
   background: var(--glass-bg-secondary);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -717,6 +725,94 @@ body {
   position: relative;
   z-index: 1;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Large laptop and desktop optimizations */
+@media (min-width: 1441px) {
+  .sidebar {
+    width: 300px;
+    min-width: 280px;
+  }
+  
+  .main-content {
+    padding: 2rem;
+    max-width: calc(100vw - 300px);
+  }
+  
+  .stages-container {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .stage-card {
+    padding: 1.5rem;
+    min-height: 220px;
+  }
+  
+  .project-header {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+}
+
+/* Standard laptop optimizations */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .sidebar {
+    width: 260px;
+    min-width: 240px;
+  }
+  
+  .main-content {
+    padding: 1.25rem;
+    max-width: calc(100vw - 260px);
+  }
+  
+  .stages-container {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+  
+  .stage-card {
+    padding: 1rem;
+    min-height: 180px;
+  }
+  
+  .project-header {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
+/* Small laptop optimizations */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .sidebar {
+    width: 240px;
+    min-width: 220px;
+  }
+  
+  .main-content {
+    padding: 1rem;
+    max-width: calc(100vw - 240px);
+  }
+  
+  .stages-container {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  
+  .stage-card {
+    padding: 1rem;
+    min-height: 160px;
+  }
+  
+  .project-header {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .project-header h2 {
+    font-size: 1.6rem;
+  }
 }
 
 @media (max-width: 768px) {
