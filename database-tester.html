@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Tester - Vercel Deployment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .url-input {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .url-input label {
+            display: block;
+            color: white;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .url-input input {
+            width: 100%;
+            max-width: 600px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(8px);
+        }
+        
+        .url-input input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .test-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+        
+        .test-card h3 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .test-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .test-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(52, 152, 219, 0.8);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+        
+        .test-button:hover {
+            background: rgba(52, 152, 219, 1);
+            transform: translateY(-2px);
+        }
+        
+        .test-button.post {
+            background: rgba(46, 204, 113, 0.8);
+        }
+        
+        .test-button.post:hover {
+            background: rgba(46, 204, 113, 1);
+        }
+        
+        .test-button.delete {
+            background: rgba(231, 76, 60, 0.8);
+        }
+        
+        .test-button.delete:hover {
+            background: rgba(231, 76, 60, 1);
+        }
+        
+        .result-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+        
+        .result-container h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        #result {
+            background: rgba(0, 0, 0, 0.3);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 10px 0;
+            display: inline-block;
+        }
+        
+        .status.success {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+        
+        .status.error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .status.loading {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Database Tester</h1>
+        
+        <div class="url-input">
+            <label for="baseUrl">Vercel Deployment URL:</label>
+            <input type="text" id="baseUrl" placeholder="https://your-project.vercel.app" 
+                   value="https://project-derekd0ng.vercel.app">
+        </div>
+        
+        <div class="test-grid">
+            <div class="test-card">
+                <h3>🏥 Health Check</h3>
+                <p>Test basic API and database connection</p>
+                <button class="test-button" onclick="testEndpoint('/api/health')">Test Health</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>🔌 Connection Test</h3>
+                <p>Detailed database connection info</p>
+                <button class="test-button" onclick="testEndpoint('/api/test/connection')">Test Connection</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>📋 Table Schema</h3>
+                <p>Check database tables and structure</p>
+                <button class="test-button" onclick="testEndpoint('/api/test/tables')">Check Tables</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>📊 Create Sample Data</h3>
+                <p>Generate test project with stages and tasks</p>
+                <button class="test-button post" onclick="testEndpoint('/api/test/sample-data', 'POST')">Create Data</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>📈 View All Data</h3>
+                <p>See all projects, stages, and tasks</p>
+                <button class="test-button" onclick="testEndpoint('/api/test/all-data')">View Data</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>⚡ Performance Test</h3>
+                <p>Measure database query performance</p>
+                <button class="test-button" onclick="testEndpoint('/api/test/performance')">Test Performance</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>🗑️ Clear All Data</h3>
+                <p>⚠️ Delete all data (for testing only)</p>
+                <button class="test-button delete" onclick="testEndpoint('/api/test/clear-data', 'DELETE')">Clear Data</button>
+            </div>
+            
+            <div class="test-card">
+                <h3>📋 List Projects</h3>
+                <p>Get all projects from API</p>
+                <button class="test-button" onclick="testEndpoint('/api/projects')">List Projects</button>
+            </div>
+        </div>
+        
+        <div class="result-container">
+            <h2>Test Results</h2>
+            <div id="status" class="status loading" style="display: none;"></div>
+            <pre id="result">Click a test button above to see results...</pre>
+        </div>
+    </div>
+
+    <script>
+        async function testEndpoint(endpoint, method = 'GET') {
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+            const statusDiv = document.getElementById('status');
+            const resultDiv = document.getElementById('result');
+            
+            if (!baseUrl) {
+                showError('Please enter your Vercel deployment URL');
+                return;
+            }
+            
+            const url = baseUrl + endpoint;
+            
+            statusDiv.style.display = 'inline-block';
+            statusDiv.className = 'status loading';
+            statusDiv.textContent = `Testing ${method} ${endpoint}...`;
+            
+            try {
+                const startTime = Date.now();
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                
+                let result;
+                const contentType = response.headers.get('content-type');
+                
+                if (contentType && contentType.includes('application/json')) {
+                    result = await response.json();
+                } else {
+                    result = await response.text();
+                }
+                
+                if (response.ok) {
+                    showSuccess(`✅ Success (${response.status}) - ${responseTime}ms`);
+                    resultDiv.textContent = JSON.stringify(result, null, 2);
+                } else {
+                    showError(`❌ Error (${response.status})`);
+                    resultDiv.textContent = JSON.stringify(result, null, 2) || result;
+                }
+                
+            } catch (error) {
+                showError(`❌ Network Error: ${error.message}`);
+                resultDiv.textContent = `Error: ${error.message}
+
+This might be because:
+1. Your Vercel URL is incorrect
+2. The deployment is not working
+3. CORS issues (try the URL directly in browser)
+4. Database not configured
+
+Try opening this URL directly: ${url}`;
+            }
+        }
+        
+        function showSuccess(message) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status success';
+            statusDiv.textContent = message;
+        }
+        
+        function showError(message) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status error';
+            statusDiv.textContent = message;
+        }
+        
+        // Auto-detect common Vercel URL patterns
+        function detectVercelUrl() {
+            const input = document.getElementById('baseUrl');
+            const githubRepo = 'derekd0ng/project'; // From git remote
+            const possibleUrls = [
+                'https://project-derekd0ng.vercel.app',
+                'https://project-git-main-derekd0ngs-projects.vercel.app',
+                'https://project-derekd0ng-derekd0ngs-projects.vercel.app'
+            ];
+            
+            // You can manually test each URL or set the correct one
+            input.placeholder = possibleUrls[0];
+        }
+        
+        // Initialize
+        detectVercelUrl();
+    </script>
+</body>
+</html>
