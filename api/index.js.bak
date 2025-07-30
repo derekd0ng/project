@@ -3,6 +3,7 @@ const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -11,36 +12,6 @@ app.use(express.json());
 let projects = [];
 let stages = [];
 let tasks = [];
-
-// Add sample data
-const sampleProject = {
-  id: uuidv4(),
-  name: 'Sample Project',
-  description: 'This is a sample project to get you started',
-  createdAt: new Date().toISOString()
-};
-projects.push(sampleProject);
-
-const sampleStage = {
-  id: uuidv4(),
-  name: 'Planning',
-  description: 'Initial planning phase',
-  projectId: sampleProject.id,
-  createdAt: new Date().toISOString()
-};
-stages.push(sampleStage);
-
-const sampleTask = {
-  id: uuidv4(),
-  title: 'Create project outline',
-  description: 'Define the scope and objectives of the project',
-  deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-  responsiblePerson: 'Project Manager',
-  stageId: sampleStage.id,
-  completed: false,
-  createdAt: new Date().toISOString()
-};
-tasks.push(sampleTask);
 
 // Project routes
 app.get('/api/projects', (req, res) => {
@@ -80,6 +51,7 @@ app.delete('/api/projects/:id', (req, res) => {
     return res.status(404).json({ error: 'Project not found' });
   }
   
+  // Remove associated stages and tasks
   stages = stages.filter(s => s.projectId !== id);
   tasks = tasks.filter(t => !stages.some(s => s.id === t.stageId && s.projectId === id));
   
@@ -131,6 +103,7 @@ app.delete('/api/stages/:id', (req, res) => {
     return res.status(404).json({ error: 'Stage not found' });
   }
   
+  // Remove associated tasks
   tasks = tasks.filter(t => t.stageId !== id);
   
   stages.splice(stageIndex, 1);
@@ -174,10 +147,10 @@ app.put('/api/tasks/:id', (req, res) => {
   
   tasks[taskIndex] = { 
     ...tasks[taskIndex], 
-    title: title !== undefined ? title : tasks[taskIndex].title,
-    description: description !== undefined ? description : tasks[taskIndex].description,
-    deadline: deadline !== undefined ? deadline : tasks[taskIndex].deadline,
-    responsiblePerson: responsiblePerson !== undefined ? responsiblePerson : tasks[taskIndex].responsiblePerson,
+    title, 
+    description, 
+    deadline, 
+    responsiblePerson,
     completed: completed !== undefined ? completed : tasks[taskIndex].completed
   };
   res.json(tasks[taskIndex]);
@@ -197,17 +170,19 @@ app.delete('/api/tasks/:id', (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    timestamp: new Date().toISOString(),
-    message: 'API is working!',
-    data: {
-      projects: projects.length,
-      stages: stages.length,
-      tasks: tasks.length
-    }
-  });
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// For Vercel serverless functions
+app.listen(PORT, '127.0.0.1', () => {
+  console.log(`Server running on http://127.0.0.1:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`API Health: http://localhost:${PORT}/api/health`);
+}).on('error', (err) => {
+  console.error('Server error:', err);
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Please kill existing processes.`);
+  }
+  process.exit(1);
+});
+
 module.exports = app;
