@@ -100,8 +100,9 @@ body {
 }
 
 .sidebar {
-  width: 350px;
-  min-width: 320px;
+  width: 25vw;
+  min-width: 300px;
+  max-width: 400px;
   background: var(--glass-bg-secondary);
   backdrop-filter: blur(var(--blur-strength));
   -webkit-backdrop-filter: blur(var(--blur-strength));
@@ -222,7 +223,8 @@ body {
   padding: 1.5rem;
   overflow-y: auto;
   background: transparent;
-  width: 100%;
+  width: 75vw;
+  min-width: 0;
 }
 
 .no-project-selected {
@@ -307,7 +309,7 @@ body {
 
 .stages-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
   gap: 1.5rem;
   width: 100%;
 }
@@ -727,20 +729,22 @@ body {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Large desktop optimizations (1920px+) */
+/* Ultra-wide screens */
 @media (min-width: 1920px) {
   .sidebar {
-    width: 400px;
+    width: 22vw;
     min-width: 380px;
+    max-width: 500px;
     padding: 2rem;
   }
   
   .main-content {
+    width: 78vw;
     padding: 2.5rem;
   }
   
   .stages-container {
-    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(380px, 30vw), 1fr));
     gap: 2rem;
   }
   
@@ -755,20 +759,22 @@ body {
   }
 }
 
-/* Standard desktop optimizations (1441-1919px) */
+/* Large desktop screens */
 @media (min-width: 1441px) and (max-width: 1919px) {
   .sidebar {
-    width: 380px;
-    min-width: 360px;
+    width: 24vw;
+    min-width: 350px;
+    max-width: 450px;
     padding: 1.75rem;
   }
   
   .main-content {
+    width: 76vw;
     padding: 2rem;
   }
   
   .stages-container {
-    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(360px, 32vw), 1fr));
     gap: 1.75rem;
   }
   
@@ -783,26 +789,28 @@ body {
   }
 }
 
-/* Laptop optimizations (1024-1440px) */
+/* Standard laptop screens */
 @media (min-width: 1024px) and (max-width: 1440px) {
   .sidebar {
-    width: 320px;
+    width: 26vw;
     min-width: 300px;
-    padding: 1.25rem;
+    max-width: 380px;
+    padding: 1.5rem;
   }
   
   .main-content {
+    width: 74vw;
     padding: 1.5rem;
   }
   
   .stages-container {
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(320px, 35vw), 1fr));
     gap: 1.25rem;
   }
   
   .stage-card {
     padding: 1.5rem;
-    min-height: 260px;
+    min-height: 280px;
   }
   
   .project-header {
@@ -811,20 +819,22 @@ body {
   }
 }
 
-/* Small laptop optimizations (769-1023px) */
+/* Small laptop/tablet landscape */
 @media (min-width: 769px) and (max-width: 1023px) {
   .sidebar {
-    width: 280px;
-    min-width: 260px;
-    padding: 1rem;
+    width: 30vw;
+    min-width: 280px;
+    max-width: 350px;
+    padding: 1.25rem;
   }
   
   .main-content {
+    width: 70vw;
     padding: 1.25rem;
   }
   
   .stages-container {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 40vw), 1fr));
     gap: 1rem;
   }
   
